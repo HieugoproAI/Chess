@@ -1,7 +1,7 @@
 from piece import *
 import itertools
-import GUI
-from GUI  import *
+import GUI_bot
+from GUI_bot  import *
 import tkinter as tk 
 #from ChessGame import *
 
@@ -59,14 +59,12 @@ class Game:
             if piece.isValid(position,kingpos,piece.Color,self.chessboard):
                 return True
     
-    def getChessBoard(self):
-        return self.chessboard
 
   
 game=Game()
 root = tk.Tk()
 root.title("Chess")
-Image={          "♙":tk.PhotoImage(file="img/whitep.png"), 
+Image={ "♙":tk.PhotoImage(file="img/whitep.png"), 
                 "♖":tk.PhotoImage(file="img/whiter.png"), 
                 "♘":tk.PhotoImage(file="img/whiten.png"), 
                 "♗":tk.PhotoImage(file="img/whiteb.png") , 
@@ -82,6 +80,7 @@ game=Game()
 board = GameBoard(root,chessboard=game.chessboard)
 board.pack(side="bottom", fill="both", expand="true", padx=4, pady=4)
 count=0
+
 
 for piece in game.chessboard:
     Name=str(game.chessboard[piece])+str(count)

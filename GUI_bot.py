@@ -89,11 +89,12 @@ class GameBoard(tk.Frame):
                 return 0
             #print("Available Move:")
             #print(self.chessboard[self.start_pos].availableMoves(self.start_pos[0],self.start_pos[1],self.chessboard))
-            if self.turn != self.chessboard[self.start_pos].Color:
+            if self.turn != BLACK:
                 print("Not your turn")
                 return 0
             #print(self.message)
             self.pop=False
+            #print(self.chessboard[self.start_pos].getValue())
         else:
             current_column = int(event.x/115)
             current_row = int(event.y /115)
@@ -101,14 +102,23 @@ class GameBoard(tk.Frame):
             piece=self.chessboard[self.start_pos]
             if self.end_pos in piece.availableMoves(self.start_pos[0],self.start_pos[1],self.chessboard):
                 self.move(self.start_pos,self.end_pos)
-                
+                self.turn=WHITE
                 if (isinstance(self.chessboard[self.end_pos],Pawn)):
                     self.chessboard[self.end_pos].Moved()
                 
             else:
                 print("Cannot move")
+                
+            
+            #self.move((1,2),(5,2))
+            #do alpha beta pruning
+            if self.turn==WHITE:
+                self.start_pos,self.end_pos= minimaxRoot(3,self.chessboard,True)
+                self.move(self.start_pos,self.end_pos)
+                if (isinstance(self.chessboard[self.end_pos],Pawn)):
+                    self.chessboard[self.end_pos].Moved()
+                self.turn=BLACK
             self.pop=True
-            #print(self.evaluate())
     
     
     
@@ -160,8 +170,6 @@ class GameBoard(tk.Frame):
         else : self.turn=BLACK
         if self.isCheck():
             print(self.message)
-        #print(self.chessboard)
-        
 
     def isCheck(self):
         #find the Kings
@@ -181,23 +189,114 @@ class GameBoard(tk.Frame):
             self.message = "Black player is in check"
             return True
         return False
-    
+        
+        
     def canSeeKing(self,kingpos,piecelist):
         for piece,position in piecelist:
             if piece.isValid(position,kingpos,piece.Color,self.chessboard):
                 return True
+           
+        
+        
+# Minimax , alpha beta pruning
+def minimaxRoot(depth, board,isMaximizing):
+    possibleMoves = getChildNode(board,depth)
 
-    # For MiniMax
-    def evaluate(self):
-        value=0
-        for piece in self.chessboard:
-            if self.chessboard[piece].Color== BLACK:
-                value -= self.chessboard[piece].getValue()
-            else :
-                value += self.chessboard[piece].getValue()
-        return value           
+    bestMove = -9999
+    secondBest = -9999
+    thirdBest = -9999
+    bestMoveFinal = None
+    for childNode in possibleMoves:
+        value = max(bestMove, minimax(depth - 1,childNode, not isMaximizing))
         
-        
+        if( value > bestMove):
+            #print("Best score: " ,str(bestMove))
+            #print("Best move: ",str(bestMoveFinal))
+            #print("Second best: ", str(secondBest))
+            thirdBest = secondBest
+            secondBest = bestMove
+            bestMove = value
+            bestMoveFinal = childNode
+        start_pos=None
+        end_pos=None
+    for piece in board:
+        if piece not in bestMoveFinal:
+            start_pos=piece
+            break
+    for piece in bestMoveFinal:
+        if piece not in board:
+            end_pos=piece
+            break
+    print("best move : From {} to {}".format(start_pos,end_pos))
+    return (start_pos,end_pos)
+
+def minimax(depth, board, is_maximizing):
+    if(depth == 0):
+        return -evaluation(board)
+    possibleMoves = getChildNode(board,depth)
+    
+    if(is_maximizing):
+        bestMove = -9999
+        for move  in possibleMoves:
+           
+            bestMove = max(bestMove,minimax(depth - 1, move, not is_maximizing))
+            
+        return bestMove
+    else:
+        bestMove = 9999
+        for move  in possibleMoves:
+           
+            bestMove = min(bestMove, minimax(depth - 1, move, not is_maximizing))
+        return bestMove
+
+
+
+
+
+def evaluation(chessboard):
+    value=0
+    for piece in chessboard:
+        if chessboard[piece].Color==BLACK:
+            value-= chessboard[piece].getValue()
+        else:
+            value+=chessboard[piece].getValue()
+    return value
+
+
+
+def getChildNode(chessboard,turn):
+  
+    result=[]
+    if (turn+1)  %2 ==0:#White Node
+
+        for piece in chessboard:
+            if chessboard[piece].Color== BLACK:
+                continue    
+            start_pos=piece
+            for end_pos in chessboard[start_pos].availableMoves(start_pos[0],start_pos[1],chessboard):
+                board=chessboard.copy()
+                P=board[start_pos]
+                board[end_pos]=board[piece]
+                board.pop(start_pos)
+                result.append(board)
+        #print("Total available Move: {}".format(len(result)))
+        return result
+    else:
+        for piece in chessboard:
+            if chessboard[piece].Color== BLACK:
+                continue    
+            start_pos=piece
+            for end_pos in chessboard[start_pos].availableMoves(start_pos[0],start_pos[1],chessboard):
+                board=chessboard.copy()
+                P=board[start_pos]
+                board[end_pos]=board[piece]
+                board.pop(start_pos)
+                result.append(board)
+        #print("Total available Move: {}".format(len(result)))
+        return result
+
+
+
 
 '''
 #test the tkinter library

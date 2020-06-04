@@ -2,6 +2,7 @@ WHITE = "white"
 BLACK = "black"
 
 
+
 class Piece:
     
     def __init__(self,color,name):
@@ -55,7 +56,8 @@ class Piece:
         "checks if a single position poses no conflict to the rules of chess"
         if self.isInBounds(x,y) and (((x,y) not in gameboard) or gameboard[(x,y)].Color != initialColor) : return True
         return False
-        
+    def getValue(self):
+        return ValueDict[type(self)]
         
 chessCardinals = [(1,0),(0,1),(-1,0),(0,-1)]
 chessDiagonals = [(1,1),(-1,1),(1,-1),(-1,-1)]
@@ -110,6 +112,7 @@ class Bishop(Piece):
 
         
 class Queen(Piece):
+    
     def availableMoves(self,x,y,gameboard, Color = None):
         if Color is None : Color = self.Color
         answers= self.AdNauseum(x, y, gameboard, Color, chessCardinals+chessDiagonals)
@@ -166,5 +169,6 @@ class Pawn(Piece):
             else:
                 Answers.append(answer)
         return Answers
-
+ValueDict={Pawn:10, Rook:50,Knight:30,Bishop:30,Queen:100,King:1000}
 uniDict = {WHITE : {Pawn : "♙", Rook : "♖", Knight : "♘", Bishop : "♗", King : "♔", Queen : "♕" }, BLACK : {Pawn : "♟", Rook : "♜", Knight : "♞", Bishop : "♝", King : "♚", Queen : "♛" }}
+
