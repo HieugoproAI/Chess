@@ -267,7 +267,7 @@ def evaluation(chessboard):
 def getChildNode(chessboard,turn):
   
     result=[]
-    if (turn+1)  %2 ==0:#White Node
+    if (turn%2 ==1):#White Node
 
         for piece in chessboard:
             if chessboard[piece].Color== BLACK:
