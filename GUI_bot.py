@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import tkinter as tk
 from piece import *
+import time
 
 class GameBoard(tk.Frame):
     def __init__(self, parent, chessboard,rows=8, columns=8, size=128, color1="white", color2="grey"):
@@ -200,6 +201,7 @@ class GameBoard(tk.Frame):
         
 # Minimax , alpha beta pruning
 def minimaxRoot(depth, board,isMaximizing):
+    start=time.time()
     possibleMoves = getChildNode(board,depth)
 
     bestMove = -9999
@@ -207,7 +209,7 @@ def minimaxRoot(depth, board,isMaximizing):
     thirdBest = -9999
     bestMoveFinal = None
     for childNode in possibleMoves:
-        value = max(bestMove, minimax(depth - 1,childNode, not isMaximizing))
+        value = max(bestMove, minimax(depth - 1,childNode, not isMaximizing,-9999,9999))
         
         if( value > bestMove):
             #print("Best score: " ,str(bestMove))
@@ -227,26 +229,34 @@ def minimaxRoot(depth, board,isMaximizing):
         if piece not in board:
             end_pos=piece
             break
+        if board[piece]!= bestMoveFinal[piece]:
+            end_pos=piece
+            break
     print("best move : From {} to {}".format(start_pos,end_pos))
+    print("inference time: {} second".format(time.time() -start))
     return (start_pos,end_pos)
 
-def minimax(depth, board, is_maximizing):
+def minimax(depth, board, ismaximizing,alpha,beta):
     if(depth == 0):
-        return -evaluation(board)
+        return evaluation(board)
     possibleMoves = getChildNode(board,depth)
     
-    if(is_maximizing):
+    if(ismaximizing):
         bestMove = -9999
         for move  in possibleMoves:
-           
-            bestMove = max(bestMove,minimax(depth - 1, move, not is_maximizing))
-            
+            bestMove = max(bestMove,minimax(depth - 1, move, not ismaximizing,alpha,beta))
+            alpha=max(bestMove,alpha)
+            if alpha>=beta:
+                break
         return bestMove
     else:
         bestMove = 9999
         for move  in possibleMoves:
            
-            bestMove = min(bestMove, minimax(depth - 1, move, not is_maximizing))
+            bestMove = min(bestMove, minimax(depth - 1, move, not ismaximizing,alpha,beta))
+            beta=min(bestMove,beta)
+            if beta <= alpha:
+                break
         return bestMove
 
 
