@@ -160,7 +160,7 @@ class Pawn(Piece):
         if (x+self.direction,y) not in gameboard and Color == self.Color : 
             answers.append((x+self.direction,y))
             # the condition after the and is to make sure the non-capturing movement (the only fucking one in the game) is not used in the calculation of checkmate
-        if (self.moved==False) and (x+1*self.direction,y)  not in gameboard and (x+2*self.direction) not in gameboard:
+        if (self.moved==False) and ((x+1*self.direction,y)  not in gameboard) and ((x+2*self.direction,y) not in gameboard):
             answers.append((x+2*self.direction,y)) 
         Answers=[]
         for answer in answers:
@@ -169,6 +169,6 @@ class Pawn(Piece):
             else:
                 Answers.append(answer)
         return Answers
-ValueDict={Pawn:10, Rook:50,Knight:30,Bishop:30,Queen:100,King:1000}
+ValueDict={Pawn:10, Rook:50,Knight:30,Bishop:30,Queen:90,King:2000}
 uniDict = {WHITE : {Pawn : "♙", Rook : "♖", Knight : "♘", Bishop : "♗", King : "♔", Queen : "♕" }, BLACK : {Pawn : "♟", Rook : "♜", Knight : "♞", Bishop : "♝", King : "♚", Queen : "♛" }}
 

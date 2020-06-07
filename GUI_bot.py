@@ -20,6 +20,8 @@ class GameBoard(tk.Frame):
         self.turn =BLACK
         self.GameDone=False
         self.message=None
+        
+        
 
 
         canvas_width = columns * size
@@ -103,10 +105,13 @@ class GameBoard(tk.Frame):
             piece=self.chessboard[self.start_pos]
             if self.end_pos in piece.availableMoves(self.start_pos[0],self.start_pos[1],self.chessboard):
                 self.move(self.start_pos,self.end_pos)
+                
                 self.turn=WHITE
                 if (isinstance(self.chessboard[self.end_pos],Pawn)):
                     self.chessboard[self.end_pos].Moved()
                 
+
+
             else:
                 print("Cannot move")
                 
