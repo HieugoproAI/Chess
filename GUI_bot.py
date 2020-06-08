@@ -20,6 +20,8 @@ class GameBoard(tk.Frame):
         self.turn =BLACK
         self.GameDone=False
         self.message=None
+        self.BlackInCheck=False
+        self.WhiteInCheck=False
         
         
 
@@ -214,7 +216,7 @@ def minimaxRoot(depth, board,isMaximizing):
     thirdBest = -9999
     bestMoveFinal = None
     for childNode in possibleMoves:
-        value = max(bestMove, minimax(depth - 1,childNode, not isMaximizing,-9999,9999))
+        value = max(bestMove, minimax(depth - 1,childNode, not isMaximizing,-99999,99999))
         
         if( value > bestMove):
             #print("Best score: " ,str(bestMove))
@@ -247,7 +249,7 @@ def minimax(depth, board, ismaximizing,alpha,beta):
     possibleMoves = getChildNode(board,depth)
     
     if(ismaximizing):
-        bestMove = -9999
+        bestMove = -999999
         for move  in possibleMoves:
             bestMove = max(bestMove,minimax(depth - 1, move, not ismaximizing,alpha,beta))
             alpha=max(bestMove,alpha)
@@ -255,7 +257,7 @@ def minimax(depth, board, ismaximizing,alpha,beta):
                 break
         return bestMove
     else:
-        bestMove = 9999
+        bestMove = 999999
         for move  in possibleMoves:
            
             bestMove = min(bestMove, minimax(depth - 1, move, not ismaximizing,alpha,beta))
@@ -280,7 +282,7 @@ def evaluation(chessboard):
 
 
 def getChildNode(chessboard,turn):
-  
+    
     result=[]
     if (turn%2 ==1):#White Node
 

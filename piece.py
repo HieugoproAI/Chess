@@ -57,6 +57,9 @@ class Piece:
         if self.isInBounds(x,y) and (((x,y) not in gameboard) or gameboard[(x,y)].Color != initialColor) : return True
         return False
     def getValue(self):
+        if self is King:
+            if self.Color==WHITE:
+                return 5000
         return ValueDict[type(self)]
         
 chessCardinals = [(1,0),(0,1),(-1,0),(0,-1)]
@@ -169,6 +172,6 @@ class Pawn(Piece):
             else:
                 Answers.append(answer)
         return Answers
-ValueDict={Pawn:10, Rook:50,Knight:30,Bishop:30,Queen:90,King:2000}
+ValueDict={Pawn:5, Rook:50,Knight:30,Bishop:30,Queen:90,King:2000}
 uniDict = {WHITE : {Pawn : "♙", Rook : "♖", Knight : "♘", Bishop : "♗", King : "♔", Queen : "♕" }, BLACK : {Pawn : "♟", Rook : "♜", Knight : "♞", Bishop : "♝", King : "♚", Queen : "♛" }}
 

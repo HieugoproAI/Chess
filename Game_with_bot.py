@@ -19,13 +19,13 @@ class Game:
         self.initPiece()
         
     def initPiece(self):
-        placers=[Rook,Knight,Bishop,King,Queen,Bishop,Knight,Rook]
+        placers=[Rook,Knight,Bishop,Queen,King,Bishop,Knight,Rook]
         for i in range(8):
             self.chessboard[(1,i)] = Pawn(WHITE,uniDict[WHITE][Pawn] ,1)
             
             self.chessboard[(6,i)] = Pawn(BLACK,uniDict[BLACK][Pawn],-1)
             
-        placers = [Rook,Knight,Bishop,King,Queen,Bishop,Knight,Rook]
+        placers = [Rook,Knight,Bishop,Queen,King,Bishop,Knight,Rook]
         
         for i in range(0,8):
             self.chessboard[(0,i)] = placers[i](WHITE,uniDict[WHITE][placers[i]])
@@ -64,18 +64,18 @@ class Game:
 game=Game()
 root = tk.Tk()
 root.title("Chess")
-Image={ "♙":tk.PhotoImage(file="img/whitep.png"), 
-                "♖":tk.PhotoImage(file="img/whiter.png"), 
-                "♘":tk.PhotoImage(file="img/whiten.png"), 
-                "♗":tk.PhotoImage(file="img/whiteb.png") , 
-                "♔":tk.PhotoImage(file="img/whitek.png"), 
-                "♕":tk.PhotoImage(file="img/whiteq.png") , 
-                "♟":tk.PhotoImage(file="img/blackp.png"), 
-                "♜":tk.PhotoImage(file="img/blackr.png"),
-                "♞":tk.PhotoImage(file="img/blackn.png"), 
-                "♝":tk.PhotoImage(file="img/blackb.png") , 
-                "♚":tk.PhotoImage(file="img/blackk.png"), 
-                "♛":tk.PhotoImage(file="img/blackq.png")}
+Image={ "♙":tk.PhotoImage(file="img/blackp.png"), 
+                "♖":tk.PhotoImage(file="img/blackr.png"), 
+                "♘":tk.PhotoImage(file="img/blackn.png"), 
+                "♗":tk.PhotoImage(file="img/blackb.png") , 
+                "♔":tk.PhotoImage(file="img/blackk.png"), 
+                "♕":tk.PhotoImage(file="img/blackq.png") , 
+                "♟":tk.PhotoImage(file="img/whitep.png"), 
+                "♜":tk.PhotoImage(file="img/whiter.png"),
+                "♞":tk.PhotoImage(file="img/whiten.png"), 
+                "♝":tk.PhotoImage(file="img/whiteb.png") , 
+                "♚":tk.PhotoImage(file="img/whitek.png"), 
+                "♛":tk.PhotoImage(file="img/whiteq.png")}
 game=Game()
 board = GameBoard(root,chessboard=game.chessboard)
 board.pack(side="bottom", fill="both", expand="true", padx=4, pady=4)
