@@ -3,6 +3,9 @@ import numpy as np
 import tkinter as tk
 from piece import *
 import time
+import random
+# import numpy as np  
+
 
 class GameBoard(tk.Frame):
     def __init__(self, parent, chessboard,rows=8, columns=8, size=128, color1="white", color2="grey"):
@@ -246,6 +249,16 @@ def minimaxRoot(depth, board,isMaximizing):
 def minimax(depth, board, ismaximizing,alpha,beta):
     if(depth == 0):
         return evaluation(board)
+    count=0
+    #count the king
+    for piece in board:
+        if type(board[piece]) is King:
+            count+=1
+            if count==2 :break
+    if count <2 :
+        return evaluation(board)
+    
+
     possibleMoves = getChildNode(board,depth)
     
     if(ismaximizing):
@@ -297,6 +310,7 @@ def getChildNode(chessboard,turn):
                 board.pop(start_pos)
                 result.append(board)
         #print("Total available Move: {}".format(len(result)))
+        random.shuffle(result)
         return result
     else:
         for piece in chessboard:
@@ -310,9 +324,10 @@ def getChildNode(chessboard,turn):
                 board.pop(start_pos)
                 result.append(board)
         #print("Total available Move: {}".format(len(result)))
+        
+        random.shuffle(result)
+        #print(type(result))
         return result
-
-
 
 
 '''

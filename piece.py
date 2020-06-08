@@ -57,9 +57,10 @@ class Piece:
         if self.isInBounds(x,y) and (((x,y) not in gameboard) or gameboard[(x,y)].Color != initialColor) : return True
         return False
     def getValue(self):
-        if self is King:
+        #print(type(self)==King)
+        if type(self) is King:
             if self.Color==WHITE:
-                return 5000
+                return 50000
         return ValueDict[type(self)]
         
 chessCardinals = [(1,0),(0,1),(-1,0),(0,-1)]
